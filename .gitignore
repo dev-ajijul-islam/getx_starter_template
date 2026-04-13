@@ -1,0 +1,11 @@
+.dart_tool/
+.packages
+.pub/
+build/
+.idea/
+android/.gradle/
+ios/Pods/
+*.iml
+
+# FVM Version Cache
+.fvm/

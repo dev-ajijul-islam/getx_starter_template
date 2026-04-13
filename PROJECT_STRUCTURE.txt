@@ -1,0 +1,21 @@
+lib/
+├── app/
+├── core/
+│   ├── bindings/
+│   ├── constants/
+│   ├── network/
+│   ├── services/
+│   ├── theme/
+│   └── utils/
+├── data/
+│   ├── models/
+│   ├── repositories/
+│   └── services/
+├── features/
+│   ├── auth/
+│   ├── bottom_nav/
+│   ├── onboarding/
+│   └── splash/
+├── presentation/
+│   └── widgets/
+└── routes/
