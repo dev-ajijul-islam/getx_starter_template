@@ -12,11 +12,22 @@ class AuthHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CommonText(text: title, fontSize: 28, fontWeight: FontWeight.w700),
+        CommonText(
+          text: title,
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 8),
-        CommonText(text: subtitle, fontSize: 15, color: AppColors.grey),
+        CommonText(
+          text: subtitle,
+          fontSize: 15,
+          color: AppColors.grey,
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -35,6 +36,44 @@ class AuthController extends GetxController {
   final RxBool isRegisterPasswordHidden = true.obs;
   final RxBool isConfirmPasswordHidden = true.obs;
 
+  // Timer Variables
+  Timer? _timer;
+  final RxInt timerSeconds = 60.obs;
+  final RxBool canResendOtp = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Start timer if on verify otp screen or wait for navigation
+  }
+
+  void startResendTimer() {
+    canResendOtp.value = false;
+    timerSeconds.value = 60;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timerSeconds.value > 0) {
+        timerSeconds.value--;
+      } else {
+        canResendOtp.value = true;
+        _timer?.cancel();
+      }
+    });
+  }
+
+  Future<void> resendOtp() async {
+    if (!canResendOtp.value) return;
+    
+    try {
+      // Simulate API call
+      // await _repository.resendOtp(email: Get.arguments);
+      AppSnackbar.success(message: 'OTP Resent Successfully');
+      startResendTimer();
+    } catch (e) {
+      AppSnackbar.error(message: e.toString());
+    }
+  }
+
   Future<void> login() async {
     if (!(loginFormKey.currentState?.validate() ?? false)) return;
     try {
@@ -63,6 +102,7 @@ class AuthController extends GetxController {
       );
       AppSnackbar.success(message: 'Account created. Please verify your OTP.');
       Get.toNamed(AppRoutes.verifyOtp, arguments: registerEmailController.text.trim());
+      startResendTimer();
     } catch (e) {
       AppSnackbar.error(message: e.toString());
     } finally {
@@ -77,6 +117,7 @@ class AuthController extends GetxController {
       // await _repository.forgotPassword(email: forgotPasswordEmailController.text.trim());
       AppSnackbar.success(message: 'OTP sent to your email');
       Get.toNamed(AppRoutes.verifyOtp, arguments: forgotPasswordEmailController.text.trim());
+      startResendTimer();
     } catch (e) {
       AppSnackbar.error(message: e.toString());
     } finally {
@@ -112,6 +153,7 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
+    _timer?.cancel();
     loginEmailController.dispose();
     loginPasswordController.dispose();
     nameController.dispose();
